@@ -2,6 +2,6 @@
 
 public class LoginResponseModel
 {
-    public string accessToekn { get; set; }
-    public string refreshToken { get; set; }
+    public string AccessToken { get; set; }
+    public string RefreshToken { get; set; }
 }

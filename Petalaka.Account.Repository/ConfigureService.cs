@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Petalaka.Account.Contract.Repository.CustomSettings;
 using Petalaka.Account.Contract.Repository.Entities;
+using Petalaka.Account.Contract.Repository.ModelMapping;
 using Petalaka.Account.Core.Utils;
 using Petalaka.Account.Repository.Base;
 
@@ -28,6 +29,7 @@ public static class ConfigureService
         services.JwtSettingsConfig(configuration);*/
         services.AddDatabase(configuration);
         services.AddDependencyInjectionRepository(configuration);
+        services.AddAutoMapperConfig(configuration);
     }
 
     public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -39,5 +41,10 @@ public static class ConfigureService
                                  throw new InvalidOperationException(
                                      "Connection string not found in appsettings.json"));
         });
+    }
+
+    public static void AddAutoMapperConfig(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAutoMapper(typeof(RoleMapping));
     }
 }

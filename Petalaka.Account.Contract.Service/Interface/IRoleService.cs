@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Petalaka.Account.Contract.Repository.Entities;
+using Petalaka.Account.Contract.Repository.ModelViews.RequestModels;
+using Petalaka.Account.Contract.Repository.ModelViews.ResponseModels;
 
 namespace Petalaka.Account.Contract.Service.Interface;
 
 public interface IRoleService
 {
-    Task<IdentityResult> CreateRoleAsync(string roleName);
-    Task<List<ApplicationRole>> GetRolesAsync();
+    Task CreateRoleAsync(CreateRoleRequestModel request);
+    Task<IEnumerable<GetRoleResponseModel>> GetRolesAsync();
 }

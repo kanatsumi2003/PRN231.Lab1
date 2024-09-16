@@ -65,12 +65,28 @@ public class AccountService : IAccountService
         return await _unitOfWork.ApplicationUserRepository.AsQueryable().ToListAsync();
     }
     
+    /// <summary>
+    /// Login and return AccessToken and RefreshToken by JWT, need to verify user password (get from request) with salt (get from database)
+    /// by hash them and compare with identity password function
+    /// </summary>
+    /// Also need to verify email is confirmed
+    /// <summary>
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <exception cref="CoreException"></exception>
     public async Task<LoginResponseModel> Login(LoginRequestModel request)
     {
         ApplicationUser user = await _userManager.FindByEmailAsync(request.Email);
         if(user == null)
         {
             throw new CoreException(StatusCodes.Status400BadRequest, "User not found");
+        }
+
+        //check if email is confirmed
+        if (!await _userManager.IsEmailConfirmedAsync(user))
+        {
+            throw new CoreException(StatusCodes.Status400BadRequest, "Email is not confirmed");
         }
         /*if(!PasswordHasher.VerifyPassword(request.Password, user.PasswordHash, user.Salt))
         {
@@ -98,8 +114,8 @@ public class AccountService : IAccountService
         var token = await _tokenService.GenerateTokens(user);
         return new LoginResponseModel
         {
-            accessToekn = token.accessToken,
-            refreshToken = token.refreshToken,
+            AccessToken = token.accessToken,
+            RefreshToken = token.refreshToken,
         };
     }
     
