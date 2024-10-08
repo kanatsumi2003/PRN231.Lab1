@@ -2,6 +2,7 @@
 using Petalaka.Account.API.Base;
 using Petalaka.Account.Contract.Repository.Base;
 using Petalaka.Account.Contract.Repository.Entities;
+using Petalaka.Account.Contract.Repository.ModelViews.BusinessModel;
 using Petalaka.Account.Contract.Repository.ModelViews.RequestModels;
 using Petalaka.Account.Contract.Repository.ModelViews.ResponseModels;
 using Petalaka.Account.Contract.Repository.Pagination;
@@ -19,18 +20,18 @@ public class CategoryController : BaseController
     
     [HttpGet]
     [Route("v1/categories")]
-    public async Task<ActionResult<PaginationResponse<Category>>> GetCategories([FromQuery] PaginationRequest request)
+    public async Task<ActionResult<PaginationResponse<CategoryModel>>> GetCategories([FromQuery] PaginationRequest request)
     {
         var categories = await _categoryService.GetCategories(request);
-        return Ok(new PaginationResponse<Category>(StatusCodes.Status200OK, "Categories retrieved successfully", categories));
+        return Ok(new PaginationResponse<CategoryModel>(StatusCodes.Status200OK, "Categories retrieved successfully", categories));
     }
     
     [HttpGet]
     [Route("v1/category/{id}")]
-    public async Task<IActionResult> GetCategoryById(int id)
+    public async Task<ActionResult<BaseResponse<CategoryModel>>> GetCategoryById(int id)
     {
         var category = await _categoryService.GetCategoryById(id);
-        return Ok(category);
+        return Ok(new BaseResponse<CategoryModel>(StatusCodes.Status200OK, "Category retrieve successfully", category));
     }
     
     [HttpPost]

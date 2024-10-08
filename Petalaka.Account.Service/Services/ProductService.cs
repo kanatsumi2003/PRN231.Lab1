@@ -46,6 +46,7 @@ public class ProductService : IProductService
             throw new CoreException(StatusCodes.Status400BadRequest, "Category not found");
         }
         var newProduct = _mapper.Map<Product>(product);
+        newProduct.Category = category;
         await _unitOfWork.ProductRepository.InsertAsync(newProduct);
         await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<CreateProductResponse>(newProduct);

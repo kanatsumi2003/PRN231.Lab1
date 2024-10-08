@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Petalaka.Account.API;
 using Petalaka.Account.API.Middleware;
 using Petalaka.Account.Contract.Repository.Entities;
+using Petalaka.Account.Core.Utils;
 using Petalaka.Account.Repository;
 using Petalaka.Account.Repository.Base;
 using Petalaka.Account.Service;
@@ -11,7 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = new LowerCaseJsonNamingPolicy();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();

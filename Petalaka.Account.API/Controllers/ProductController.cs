@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Petalaka.Account.API.Base;
 using Petalaka.Account.Contract.Repository.Base;
 using Petalaka.Account.Contract.Repository.Entities;
@@ -39,7 +40,7 @@ public class ProductController : BaseController
     public async Task<ActionResult<BaseResponse<CreateProductResponse>>> CreateProduct(CreateProductRequest product)
     {
         var createdProduct = await _productService.CreateProduct(product);
-        return CreatedAtAction("", new BaseResponse(StatusCodes.Status201Created, "Product created successfully", createdProduct));
+        return Created("", new BaseResponse<CreateProductResponse>(StatusCodes.Status201Created, "Product created successfully", createdProduct));
     }
     
     [HttpPut]
@@ -47,7 +48,7 @@ public class ProductController : BaseController
     public async Task<ActionResult<BaseResponse<UpdateProductResponse>>> UpdateProduct(UpdateProductRequest product)
     {
         var updatedProduct = await _productService.UpdateProduct(product);
-        return Ok(new BaseResponse(StatusCodes.Status200OK, "Product updated successfully", updatedProduct));
+        return Ok(new BaseResponse<UpdateProductResponse>(StatusCodes.Status200OK, "Product updated successfully", updatedProduct));
     }
     
     [HttpDelete]
@@ -55,7 +56,7 @@ public class ProductController : BaseController
     public async Task<ActionResult<BaseResponse<DeleteProductResponse>>> DeleteProduct(int id)
     {
         var deleteProduct = await _productService.DeleteProduct(id);
-        return Ok(new BaseResponse(StatusCodes.Status200OK, "Product deleted successfully", deleteProduct));
+        return Ok(new BaseResponse<DeleteProductResponse>(StatusCodes.Status200OK, "Product deleted successfully", deleteProduct));
     }
     
 }

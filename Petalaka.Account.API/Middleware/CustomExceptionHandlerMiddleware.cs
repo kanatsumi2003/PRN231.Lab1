@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Petalaka.Account.Core.ExceptionCustom;
+using Petalaka.Account.Core.Utils;
 
 namespace Petalaka.Account.API.Middleware;
 
@@ -22,7 +23,12 @@ public class CustomExceptionHandlerMiddleware
         {
             _logger.LogError(ex, ex.Message);
             context.Response.StatusCode = ex.StatusCode;
-            var result = JsonSerializer.Serialize(new { ex.StatusCode, ex.ErrorMessage});
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = new LowerCaseJsonNamingPolicy(),
+                WriteIndented = true // Optional: For pretty printing
+            };
+            var result = JsonSerializer.Serialize(new { ex.StatusCode, ex.ErrorMessage}, options);
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(result);
         }
@@ -30,7 +36,12 @@ public class CustomExceptionHandlerMiddleware
         {
             _logger.LogError(ex, "An unexpected error occurred.");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            var result = JsonSerializer.Serialize(new { error = $"An unexpected error occurred. Detail{ex.Message}" });
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = new LowerCaseJsonNamingPolicy(),
+                WriteIndented = true // Optional: For pretty printing
+            };
+            var result = JsonSerializer.Serialize(new { error = $"An unexpected error occurred. Detail{ex.Message}" }, options);
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsync(result);
         }

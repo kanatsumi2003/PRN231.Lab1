@@ -10,6 +10,7 @@ public class CoreException : Exception
         StatusCode = statusCode;
         ErrorMessage = errorMessage;
     }
+    
     public int StatusCode { get; set; }
     public string ErrorMessage { get; set; }    
 }
